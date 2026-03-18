@@ -13,10 +13,9 @@
             <div class="nav-icon">📋</div>
             <span class="nav-text">认养订单</span>
           </div>
-          
-          <div class="nav-item" @click="navigateTo('/user/adoptions')">
-            <div class="nav-icon">�</div>
-            <span class="nav-text">认养订单</span>
+          <div class="nav-item" @click="navigateTo('/user/logistics')">
+            <div class="nav-icon">🚚</div>
+            <span class="nav-text">物流信息</span>
           </div>
         </nav>
       </aside>

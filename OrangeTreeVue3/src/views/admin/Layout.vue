@@ -34,6 +34,10 @@
           <span class="menu-icon">📋</span>
           <span class="menu-text">认养订单</span>
         </router-link>
+        <router-link to="/admin/logistics" class="menu-item">
+          <span class="menu-icon">🚚</span>
+          <span class="menu-text">物流管理</span>
+        </router-link>
         <a href="#" class="menu-item logout" @click.prevent="handleLogout">
           <span class="menu-icon">🚪</span>
           <span class="menu-text">退出登录</span>

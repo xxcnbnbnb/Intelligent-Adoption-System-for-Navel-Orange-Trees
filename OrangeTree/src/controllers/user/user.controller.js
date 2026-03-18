@@ -7,6 +7,53 @@ const UserService = require('../../services/user/user.service');
  */
 class UserController {
   /**
+   * 用户注册
+   * 处理用户注册请求，创建新用户账号
+   * 
+   * @param {Object} req - Express请求对象
+   * @param {Object} req.body - 请求体，包含注册信息
+   * @param {string} req.body.phone - 用户手机号
+   * @param {string} req.body.password - 用户密码
+   * @param {string} req.body.nickname - 用户昵称
+   * @param {Object} res - Express响应对象
+   * @param {Function} next - Express下一个中间件函数（错误处理）
+   * @returns {Promise<void>} - 返回注册结果或错误
+   */
+  async register(req, res, next) {
+    try {
+      console.log('注册请求体:', req.body);
+      
+      const { phone, password, nickname } = req.body;
+      
+      if (!phone || !password || !nickname) {
+        return res.status(400).json({
+          success: false,
+          message: '手机号、密码和昵称不能为空'
+        });
+      }
+      
+      const registerResult = await UserService.register(phone, password, nickname);
+      
+      res.status(201).json({
+        success: true,
+        message: '注册成功',
+        data: registerResult
+      });
+    } catch (error) {
+      console.error('注册失败:', error);
+      
+      if (error.message === '该手机号已被注册') {
+        return res.status(409).json({
+          success: false,
+          message: error.message
+        });
+      }
+      
+      next(error);
+    }
+  }
+
+  /**
    * 用户登录
    * 处理用户登录请求，验证用户身份并返回JWT令牌
    * 

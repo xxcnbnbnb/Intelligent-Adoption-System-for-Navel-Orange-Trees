@@ -15,6 +15,14 @@ const interactionController = require('../controllers/user/interaction.controlle
 // ==================== 登录路由 ====================
 
 /**
+ * POST /api/user/register
+ * 用户注册
+ * 不需要JWT认证
+ * 请求体：{ phone, password, nickname }
+ */
+router.post('/register', userController.register);
+
+/**
  * POST /api/user/login
  * 用户登录
  * 不需要JWT认证
@@ -116,6 +124,14 @@ router.get('/trees/:treeId/growth', growthController.getGrowthRecords);
 router.get('/growth/:id', growthController.getGrowthRecordById);
 
 // ==================== 物流信息路由 ====================
+/**
+ * GET /api/user/logistics
+ * 获取当前用户的物流列表
+ * 需要JWT认证
+ * 查询参数：page, limit, status
+ */
+router.get('/logistics', logisticsController.getUserLogisticsList);
+
 /**
  * GET /api/user/adoptions/:adoptionId/logistics
  * 获取指定认养订单的物流信息

@@ -6,7 +6,11 @@
       </template>
       
       <div class="logistics-content">
-        <div class="logistics-info">
+        <div v-if="!logistics.id" class="no-logistics">
+          <el-empty description="暂无物流信息"></el-empty>
+        </div>
+        
+        <div v-else class="logistics-info">
           <el-descriptions :column="1" border>
             <el-descriptions-item label="收获批次">{{ logistics.harvest_batch || '-' }}</el-descriptions-item>
             <el-descriptions-item label="产品数量">{{ logistics.product_amount ? logistics.product_amount + ' 斤' : '-' }}</el-descriptions-item>
@@ -67,14 +71,21 @@ export default {
         console.log('物流信息响应:', response);
         
         if (response.success) {
-          Object.assign(logistics, response.data);
-          ElMessage.success('获取物流信息成功');
+          if (response.data) {
+            Object.assign(logistics, response.data);
+          } else {
+            console.log('该订单暂无物流信息');
+          }
         } else {
           ElMessage.error(response.message || '获取物流信息失败');
         }
       } catch (error) {
-        ElMessage.error('获取物流信息失败');
-        console.error('获取物流信息失败:', error);
+        console.log('获取物流信息时出错:', error);
+        if (error.response && error.response.status === 404) {
+          console.log('该订单暂无物流信息');
+        } else {
+          ElMessage.error('获取物流信息失败');
+        }
       } finally {
         loading.value = false;
       }
@@ -150,5 +161,10 @@ export default {
   display: flex;
   justify-content: center;
   margin-top: var(--spacing-lg);
+}
+
+.no-logistics {
+  text-align: center;
+  padding: var(--spacing-xl);
 }
 </style>

@@ -1,6 +1,9 @@
 import api from './api';
 
 export const userApi = {
+  // 注册
+  register: (data) => api.post('/user/register', data),
+  
   // 登录
   login: (data) => api.post('/user/login', data),
   
@@ -36,6 +39,9 @@ export const userApi = {
   
   // 获取物流信息
   getLogistics: (adoptionId) => api.get(`/user/adoptions/${adoptionId}/logistics`),
+  
+  // 获取物流列表
+  getUserLogisticsList: (params) => api.get('/user/logistics', { params }),
   
   // 创建物流信息
   createLogistics: (data) => api.post('/user/logistics', data),

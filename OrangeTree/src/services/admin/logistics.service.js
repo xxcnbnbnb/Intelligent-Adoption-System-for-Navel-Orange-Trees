@@ -3,43 +3,27 @@ const Logistics = require('../../models/user/logistics.model');
 const { user: userDb } = require('../../config/database.config');
 
 class LogisticsService {
-  async getLogisticsByAdoptionId(adoptionId) {
-    const logistics = await LogisticsRepository.findByAdoptionId(adoptionId);
-    
-    if (!logistics) {
-      throw new Error('物流信息不存在');
-    }
-    
-    return logistics;
-  }
-
-  async getUserLogisticsList(userId, options = {}) {
-    const { page = 1, limit = 10, status } = options;
+  async getLogisticsList(options = {}) {
+    const { page = 1, limit = 10, status, adoption_id } = options;
     const offset = (page - 1) * limit;
     
-    const buildQuery = function(userId, status) {
-      let query = Logistics.query()
-        .where('adopt_id', 'in', function() {
-          this.select('id')
-          .from('user_adoptions')
-          .where('user_id', userId);
-        });
-      
-      if (status) {
-        query = query.where('status', status);
-      }
-      
-      return query;
-    };
+    let query = Logistics.query()
+      .orderBy('created_at', 'desc');
     
-    const data = await buildQuery(userId, status)
-      .orderBy('created_at', 'desc')
+    if (status) {
+      query = query.where('status', status);
+    }
+    
+    if (adoption_id) {
+      query = query.where('adopt_id', adoption_id);
+    }
+    
+    const data = await query
       .limit(limit)
       .offset(offset);
     
-    const countQuery = buildQuery(userId, status);
-    
-    const total = await countQuery.resultSize();
+    const total = await Logistics.query()
+      .resultSize();
     
     return {
       data,
@@ -50,6 +34,16 @@ class LogisticsService {
         pages: Math.ceil(total / limit)
       }
     };
+  }
+
+  async getLogisticsById(id) {
+    const logistics = await LogisticsRepository.findById(id);
+    
+    if (!logistics) {
+      throw new Error('物流信息不存在');
+    }
+    
+    return logistics;
   }
 
   async createLogistics(data) {
@@ -126,29 +120,6 @@ class LogisticsService {
         logistics_no,
         status: 'shipped',
         send_time: sendTime
-      });
-    
-    return await LogisticsRepository.findById(id);
-  }
-
-  async receiveLogistics(id) {
-    const logistics = await LogisticsRepository.findById(id);
-    
-    if (!logistics) {
-      throw new Error('物流信息不存在');
-    }
-    
-    if (logistics.status !== 'shipped') {
-      throw new Error('只能签收已发货状态的物流');
-    }
-    
-    const receiveTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    
-    await userDb('user_logistics')
-      .where('id', id)
-      .update({
-        status: 'received',
-        receive_time: receiveTime
       });
     
     return await LogisticsRepository.findById(id);

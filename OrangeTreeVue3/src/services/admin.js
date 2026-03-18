@@ -71,5 +71,23 @@ export const adminApi = {
   updateUser: (id, data) => api.put(`/admin/users/${id}`, data),
   
   // 删除用户
-  deleteUser: (id) => api.delete(`/admin/users/${id}`)
+  deleteUser: (id) => api.delete(`/admin/users/${id}`),
+  
+  // 获取物流列表
+  getLogistics: (params) => api.get('/admin/logistics', { params }),
+  
+  // 获取物流详情
+  getLogisticsById: (id) => api.get(`/admin/logistics/${id}`),
+  
+  // 创建物流信息
+  createLogistics: (data) => api.post('/admin/logistics', data),
+  
+  // 更新物流信息
+  updateLogistics: (id, data) => api.put(`/admin/logistics/${id}`, data),
+  
+  // 发货
+  shipLogistics: (id, data) => api.put(`/admin/logistics/${id}/ship`, data),
+  
+  // 删除物流信息
+  deleteLogistics: (id) => api.delete(`/admin/logistics/${id}`)
 };

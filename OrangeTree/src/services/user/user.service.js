@@ -9,6 +9,36 @@ const config = require('../../config');
  */
 class UserService {
   /**
+   * 用户注册
+   * 创建新用户账号
+   * 
+   * @param {string} phone - 用户手机号
+   * @param {string} password - 用户密码
+   * @param {string} nickname - 用户昵称
+   * @returns {Promise<Object>} 返回创建的用户对象
+   * @throws {Error} 当手机号已被注册时抛出错误
+   */
+  async register(phone, password, nickname) {
+    const existingUser = await UserRepository.findByPhone(phone);
+    
+    if (existingUser) {
+      throw new Error('该手机号已被注册');
+    }
+    
+    const newUser = await UserRepository.create({
+      phone,
+      password,
+      nickname,
+      status: 'active',
+      is_deleted: 0
+    });
+    
+    const { password: _, ...userInfo } = newUser;
+    
+    return userInfo;
+  }
+
+  /**
    * 获取用户个人资料
    * 根据用户ID查询用户信息
    * 

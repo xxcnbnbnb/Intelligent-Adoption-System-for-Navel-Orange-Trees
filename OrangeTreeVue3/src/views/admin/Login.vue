@@ -29,6 +29,9 @@
         <button type="submit" class="btn btn-primary btn-block" :disabled="loading">
           {{ loading ? '登录中...' : '登录' }}
         </button>
+        <div class="login-footer">
+          <router-link to="/user/login" class="user-link">用户登录</router-link>
+        </div>
       </form>
     </div>
   </div>
@@ -142,5 +145,20 @@ label {
   color: var(--error-color);
   font-size: var(--font-size-sm);
   margin: var(--spacing-sm) 0;
+}
+
+.login-footer {
+  margin-top: var(--spacing-md);
+  text-align: center;
+}
+
+.user-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+}
+
+.user-link:hover {
+  text-decoration: underline;
 }
 </style>

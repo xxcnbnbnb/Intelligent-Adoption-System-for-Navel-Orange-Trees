@@ -65,7 +65,6 @@ export default {
       router.push('/user/login');
     };
     
-    // 页面加载时获取用户信息
     onMounted(() => {
       if (userStore.isLoggedIn) {
         userStore.getProfile();

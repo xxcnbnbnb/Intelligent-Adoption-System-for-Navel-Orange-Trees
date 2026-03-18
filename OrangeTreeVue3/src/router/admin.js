@@ -44,6 +44,12 @@ const adminRoutes = [
         name: 'AdoptionManagement',
         component: () => import('../views/admin/AdoptionManagement.vue'),
         meta: { title: '认养订单管理' }
+      },
+      {
+        path: 'logistics',
+        name: 'LogisticsManagement',
+        component: () => import('../views/admin/LogisticsManagement.vue'),
+        meta: { title: '物流管理' }
       }
     ]
   },

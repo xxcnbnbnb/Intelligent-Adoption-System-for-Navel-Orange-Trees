@@ -31,6 +31,7 @@
         </button>
         <div class="login-footer">
           <router-link to="/user/register" class="register-link">注册新账号</router-link>
+          <router-link to="/admin/login" class="admin-link">管理员登录</router-link>
         </div>
       </form>
     </div>
@@ -159,6 +160,17 @@ label {
 }
 
 .register-link:hover {
+  text-decoration: underline;
+}
+
+.admin-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  margin-left: var(--spacing-md);
+}
+
+.admin-link:hover {
   text-decoration: underline;
 }
 </style>

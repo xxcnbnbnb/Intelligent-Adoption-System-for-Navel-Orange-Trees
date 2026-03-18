@@ -52,6 +52,12 @@ const userRoutes = [
         meta: { title: '物流信息' }
       },
       {
+        path: 'logistics',
+        name: 'LogisticsList',
+        component: () => import('../views/user/LogisticsList.vue'),
+        meta: { title: '物流信息' }
+      },
+      {
         path: 'interaction/:treeId',
         name: 'Interaction',
         component: () => import('../views/user/Interaction.vue'),

@@ -1,10 +1,30 @@
-const LogisticsService = require('../../services/user/logistics.service');
+const LogisticsService = require('../../services/admin/logistics.service');
 
 class LogisticsController {
-  async getLogistics(req, res, next) {
+  async getLogisticsList(req, res, next) {
     try {
-      const { adoptionId } = req.params;
-      const logistics = await LogisticsService.getLogisticsByAdoptionId(adoptionId);
+      const { page = 1, limit = 10, status, adoption_id } = req.query;
+      const logistics = await LogisticsService.getLogisticsList({
+        page: parseInt(page),
+        limit: parseInt(limit),
+        status,
+        adoption_id
+      });
+      
+      res.status(200).json({
+        success: true,
+        data: logistics.data,
+        pagination: logistics.pagination
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getLogisticsById(req, res, next) {
+    try {
+      const { id } = req.params;
+      const logistics = await LogisticsService.getLogisticsById(id);
       
       res.status(200).json({
         success: true,
@@ -17,27 +37,6 @@ class LogisticsController {
           message: '物流信息不存在'
         });
       }
-      next(error);
-    }
-  }
-
-  async getUserLogisticsList(req, res, next) {
-    try {
-      const userId = req.user.id;
-      const { page = 1, limit = 10, status } = req.query;
-      
-      const result = await LogisticsService.getUserLogisticsList(userId, {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        status
-      });
-      
-      res.status(200).json({
-        success: true,
-        data: result.data,
-        pagination: result.pagination
-      });
-    } catch (error) {
       next(error);
     }
   }
@@ -67,6 +66,12 @@ class LogisticsController {
         data: logistics
       });
     } catch (error) {
+      if (error.message === '物流信息不存在') {
+        return res.status(404).json({
+          success: false,
+          message: '物流信息不存在'
+        });
+      }
       next(error);
     }
   }
@@ -82,21 +87,12 @@ class LogisticsController {
         data: logistics
       });
     } catch (error) {
-      next(error);
-    }
-  }
-
-  async receiveLogistics(req, res, next) {
-    try {
-      const { id } = req.params;
-      const logistics = await LogisticsService.receiveLogistics(id);
-      
-      res.status(200).json({
-        success: true,
-        message: '确认收货成功',
-        data: logistics
-      });
-    } catch (error) {
+      if (error.message === '物流信息不存在') {
+        return res.status(404).json({
+          success: false,
+          message: '物流信息不存在'
+        });
+      }
       next(error);
     }
   }
@@ -111,6 +107,12 @@ class LogisticsController {
         message: '删除物流信息成功'
       });
     } catch (error) {
+      if (error.message === '物流信息不存在') {
+        return res.status(404).json({
+          success: false,
+          message: '物流信息不存在'
+        });
+      }
       next(error);
     }
   }

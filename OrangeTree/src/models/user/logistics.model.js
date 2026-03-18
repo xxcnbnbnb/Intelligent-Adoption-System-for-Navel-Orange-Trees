@@ -28,12 +28,7 @@ class Logistics extends Model {
           type: 'string',
           enum: ['pending', 'shipped', 'received'],
           default: 'pending'
-        },
-        send_time: { type: ['string', 'null'], format: 'date-time' },
-        receive_time: { type: ['string', 'null'], format: 'date-time' },
-        is_deleted: { type: 'boolean', default: false },
-        created_at: { type: 'string', format: 'date-time' },
-        updated_at: { type: 'string', format: 'date-time' }
+        }
       }
     };
   }
@@ -49,6 +44,10 @@ class Logistics extends Model {
         }
       }
     };
+  }
+  async $beforeUpdate(opt, queryContext) {
+    await super.$beforeUpdate(opt, queryContext);
+    this.updated_at = new Date().toISOString().slice(0, 19).replace('T', ' ');
   }
 }
 

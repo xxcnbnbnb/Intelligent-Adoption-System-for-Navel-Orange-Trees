@@ -13,6 +13,7 @@ const treeManageController = require('../controllers/admin/tree-manage.controlle
 const harvestController = require('../controllers/admin/harvest.controller');
 const adoptionController = require('../controllers/admin/adoption.controller');
 const userManageController = require('../controllers/admin/user-manage.controller');
+const logisticsController = require('../controllers/admin/logistics.controller');
 
 // ==================== 登录路由 ====================
 
@@ -233,6 +234,58 @@ router.put('/users/:id', userManageController.updateUser);
  * 路径参数：id - 用户ID
  */
 router.delete('/users/:id', userManageController.deleteUser);
+
+// ==================== 物流管理路由 ====================
+
+/**
+ * GET /api/admin/logistics
+ * 获取物流列表（支持分页和筛选）
+ * 需要管理员权限
+ * 查询参数：page, limit, status, adoption_id
+ */
+router.get('/logistics', logisticsController.getLogisticsList);
+
+/**
+ * GET /api/admin/logistics/:id
+ * 获取指定物流的详情
+ * 需要管理员权限
+ * 路径参数：id - 物流ID
+ */
+router.get('/logistics/:id', logisticsController.getLogisticsById);
+
+/**
+ * POST /api/admin/logistics
+ * 创建新的物流信息
+ * 需要管理员权限
+ * 请求体：{ adopt_id, harvest_batch, product_amount, receiver_name, receiver_phone, receiver_address, logistics_company?, logistics_no? }
+ */
+router.post('/logistics', logisticsController.createLogistics);
+
+/**
+ * PUT /api/admin/logistics/:id
+ * 更新物流信息
+ * 需要管理员权限
+ * 路径参数：id - 物流ID
+ * 请求体：{ receiver_name?, receiver_phone?, receiver_address?, logistics_company?, logistics_no? }
+ */
+router.put('/logistics/:id', logisticsController.updateLogistics);
+
+/**
+ * PUT /api/admin/logistics/:id/ship
+ * 发货
+ * 需要管理员权限
+ * 路径参数：id - 物流ID
+ * 请求体：{ logistics_company, logistics_no }
+ */
+router.put('/logistics/:id/ship', logisticsController.shipLogistics);
+
+/**
+ * DELETE /api/admin/logistics/:id
+ * 删除物流信息（软删除）
+ * 需要管理员权限
+ * 路径参数：id - 物流ID
+ */
+router.delete('/logistics/:id', logisticsController.deleteLogistics);
 
 // 导出路由器
 module.exports = router;

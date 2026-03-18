@@ -45,11 +45,6 @@ class LogisticsRepository {
     const query = Logistics.query(trx || Logistics.knex());
     return await query.deleteById(id);
   }
-
-  async softDeleteById(id, trx = null) {
-    const query = Logistics.query(trx || Logistics.knex());
-    return await query.patchById(id, { is_deleted: true });
-  }
 }
 
 module.exports = new LogisticsRepository();
